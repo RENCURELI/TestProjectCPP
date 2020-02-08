@@ -9,6 +9,15 @@ ACPPTestPlayer::ACPPTestPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Set capsule size
+	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	//Create camera component
+	CameraComponent = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("MainCamera")); //Create and name component
+	CameraComponent->SetupAttachment(GetCapsuleComponent()); //Attach to capsule component
+	CameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); //Set camera position
+	CameraComponent->bUsePawnControlRotation = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -25,10 +34,31 @@ void ACPPTestPlayer::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void ACPPTestPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ACPPTestPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent); //Check if properly setup, IF NOT stops function preventing errors
 
+	//Movement
+	PlayerInputComponent->BindAxis("Forward", this, &ACPPTestPlayer::MoveForward);
+	PlayerInputComponent->BindAxis("Right", this, &ACPPTestPlayer::MoveRight);
+
+	//Mouse controls
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 }
 
+void ACPPTestPlayer::MoveForward(float val)
+{
+	if (val != 0)
+	{
+		AddMovementInput(GetActorForwardVector(), val);
+	}
+}
+
+void ACPPTestPlayer::MoveRight(float val)
+{
+	if (val != 0)
+	{
+		AddMovementInput(GetActorRightVector(), val);
+	}
+}
