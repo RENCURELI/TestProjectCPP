@@ -18,6 +18,7 @@ ACPPTestPlayer::ACPPTestPlayer()
 	CameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); //Set camera position
 	CameraComponent->bUsePawnControlRotation = true;
 
+	g_jumpHeight = 600.f;
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +41,7 @@ void ACPPTestPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	//Actions
 	PlayerInputComponent->BindAction("SimpleAction", IE_Pressed, this, &ACPPTestPlayer::SimpleAction);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACPPTestPlayer::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACPPTestPlayer::DoubleJump);
 
 	//Movement
 	PlayerInputComponent->BindAxis("Forward", this, &ACPPTestPlayer::MoveForward);
@@ -49,6 +50,11 @@ void ACPPTestPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	//Mouse controls
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+}
+
+void ACPPTestPlayer::Landed(const FHitResult & hit)
+{
+	g_doubleJumpCount = 0;
 }
 
 void ACPPTestPlayer::MoveForward(float val)
@@ -72,7 +78,11 @@ void ACPPTestPlayer::SimpleAction()
 	UE_LOG(LogTemp, Warning, TEXT("E was pressed"));
 }
 
-void ACPPTestPlayer::Jump()
+void ACPPTestPlayer::DoubleJump()
 {
-	//Waiting for more code
+	if (g_doubleJumpCount <= 1)
+	{
+		ACPPTestPlayer::LaunchCharacter(FVector(0 , 0 ,g_jumpHeight), false, true);
+		g_doubleJumpCount++;
+	}
 }

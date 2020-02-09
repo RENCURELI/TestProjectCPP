@@ -32,6 +32,8 @@ protected:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
+	virtual void Landed(const FHitResult& hit) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -39,5 +41,12 @@ public:
 	UFUNCTION()
 		void SimpleAction();
 
-	void Jump();
+	UFUNCTION()
+		void DoubleJump();
+
+	UPROPERTY()
+		int g_doubleJumpCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float g_jumpHeight;
 };
