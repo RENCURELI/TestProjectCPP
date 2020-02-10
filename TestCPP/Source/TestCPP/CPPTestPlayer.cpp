@@ -19,6 +19,8 @@ ACPPTestPlayer::ACPPTestPlayer()
 	CameraComponent->bUsePawnControlRotation = true;
 
 	g_jumpHeight = 600.f;
+	g_walkSpeed = 600.f;
+	g_runSpeed = 1200.f;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +44,8 @@ void ACPPTestPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	//Actions
 	PlayerInputComponent->BindAction("SimpleAction", IE_Pressed, this, &ACPPTestPlayer::SimpleAction);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACPPTestPlayer::DoubleJump);
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ACPPTestPlayer::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ACPPTestPlayer::Walk);
 
 	//Movement
 	PlayerInputComponent->BindAxis("Forward", this, &ACPPTestPlayer::MoveForward);
@@ -85,4 +89,14 @@ void ACPPTestPlayer::DoubleJump()
 		ACPPTestPlayer::LaunchCharacter(FVector(0 , 0 ,g_jumpHeight), false, true);
 		g_doubleJumpCount++;
 	}
+}
+
+void ACPPTestPlayer::Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = g_runSpeed;
+}
+
+void ACPPTestPlayer::Walk()
+{
+	GetCharacterMovement()->MaxWalkSpeed = g_walkSpeed;
 }

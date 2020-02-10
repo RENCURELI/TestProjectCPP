@@ -6,7 +6,9 @@
 #include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "CPPTestPlayer.generated.h"
+
 
 class UInputComponent;
 
@@ -49,4 +51,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float g_jumpHeight;
+
+	UFUNCTION()
+		void Sprint();
+
+	UFUNCTION()
+		void Walk();
+
+	UPROPERTY(EditAnywhere)
+		float g_walkSpeed;
+
+	UPROPERTY(EditAnywhere)
+		float g_runSpeed;
 };
