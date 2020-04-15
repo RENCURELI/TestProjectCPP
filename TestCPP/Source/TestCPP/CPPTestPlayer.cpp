@@ -27,6 +27,11 @@ ACPPTestPlayer::ACPPTestPlayer()
 void ACPPTestPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	m_moodVal = 1.0f;
+	m_healthVal = 1.0f;
+	m_energyVal = 1.0f;
+	//m_grounded = true;
 	
 }
 
@@ -86,8 +91,19 @@ void ACPPTestPlayer::DoubleJump()
 {
 	if (g_doubleJumpCount <= 1)
 	{
-		ACPPTestPlayer::LaunchCharacter(FVector(0 , 0 ,g_jumpHeight), false, true);
-		g_doubleJumpCount++;
+		if (g_doubleJumpCount == 0 && GetCharacterMovement()->IsFalling() == false)
+		{
+			ACPPTestPlayer::LaunchCharacter(FVector(0, 0, g_jumpHeight), false, true);
+			g_doubleJumpCount++;
+			m_energyVal -= 0.15;
+		}
+		else if (g_doubleJumpCount > 0)
+		{
+			ACPPTestPlayer::LaunchCharacter(FVector(0, 0, g_jumpHeight), false, true);
+			g_doubleJumpCount++;
+			m_energyVal -= 0.15;
+		}
+		
 	}
 }
 

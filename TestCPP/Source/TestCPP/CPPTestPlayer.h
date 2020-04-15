@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "GameFramework/NavMovementComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "CPPTestPlayer.generated.h"
 
@@ -36,6 +37,17 @@ protected:
 
 	virtual void Landed(const FHitResult& hit) override;
 
+
+	UPROPERTY(BlueprintReadWrite)
+		float m_healthVal;
+
+	UPROPERTY(BlueprintReadWrite)
+		float m_energyVal;
+
+	UPROPERTY(BlueprintReadWrite)
+		float m_moodVal;
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -63,4 +75,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float g_runSpeed;
+
+private :
+
+	
 };
